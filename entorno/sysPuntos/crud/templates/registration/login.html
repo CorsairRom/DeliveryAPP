@@ -1,0 +1,33 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+{% comment %} {% load crispy_forms_tags%} {% endcomment %}
+{% load django_bootstrap5 %}
+
+{% block contenido %}
+
+    <div class="container">
+        
+        <div class="row">
+            
+            <div class="col-12 col-md-6 offset-md-3 mt-3 border rounded shadow p-3">
+                <h3>Iniciar Sesión</h3>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% comment %} {{form|crispy}} {% endcomment %}
+                    <button type="submit" class="button btn btn-success"> Iniciar Sesion</button>
+                    
+                </form>
+                <br>
+                <a href="{% url 'register' %}">Registrarse</a>
+            </div>
+            
+            <div class="col-lg-2"></div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock contenido %}
