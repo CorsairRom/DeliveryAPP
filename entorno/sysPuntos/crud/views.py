@@ -24,3 +24,7 @@ def register(request):
             return redirect(to="cliente")
         data["form"]= formulario    
     return render(request, 'registration/register.html', data)
+
+def perfil(request):
+    
+    return render(request, 'crud/perfil.html')
