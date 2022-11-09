@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from .form import ClienteForm
 
 from crud.forms import Custom
 
@@ -28,3 +29,9 @@ def register(request):
 def perfil(request):
     
     return render(request, 'crud/perfil.html')
+def CreateCliente(request):
+    form = ClienteForm
+    context = {
+        "form": form
+    }
+    return render(request, 'registration/CreateCliente.html', context)
