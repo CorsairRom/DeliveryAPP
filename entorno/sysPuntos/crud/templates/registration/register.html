@@ -16,7 +16,9 @@
                     {% bootstrap_form form %}
 
                     {% comment %} {{form|crispy}} {% endcomment %}
-                    <button type="submit" class="button btn btn-success"> Continuar</button>
+                    <button type="submit" class="button btn btn-success"> 
+                        <a href="{% url 'CreateCliente' %}">Continuar</a>
+                    </button>
                 </form>
                 <br>
                 <a href="{% url 'login' %}">

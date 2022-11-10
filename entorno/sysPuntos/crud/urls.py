@@ -1,4 +1,4 @@
-from crud.views import CreateCliente, index, perfil, register
+from crud.views import  CreateCliente, index, perfil, register
 from django.urls import path, include
 from crud.api.router import router_posts
 
