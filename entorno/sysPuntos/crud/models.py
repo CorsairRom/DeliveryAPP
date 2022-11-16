@@ -44,3 +44,48 @@ class promocion(models.Model):
     
     def __str__(self):
         return self.nombre_promo
+
+class metodo_pago(models.Model):
+    nom_pago = models.CharField(max_length=50, null=True, verbose_name='Nombre Metodo')
+    
+    def __str__(self):
+        return self.nom_pago
+    
+class producto(models.Model):
+    nom_producto = models.CharField(max_length=50, null=True, verbose_name='Nombre producto') 
+    precio = models.IntegerField()
+    stock = models.IntegerField()
+    
+    def __str__(self):
+        return self.nom_producto
+
+class trabajador(models.Model):
+    rut_trabajador = models.CharField(max_length=10, null=True, primary_key=True, verbose_name='Rut')
+    nombre_trabajador = models.CharField(max_length=50, null=True, verbose_name='Nombre trabajador')
+    tipo_trabajador = models.CharField(max_length=50, null=True, verbose_name='Tipo trabajador')
+    
+    def __str__(self):
+        return self.rut_trabajador
+
+   
+class pedido(models.Model):
+    rut_cliente = models.ForeignKey(cliente, on_delete=models.CASCADE, null=True, verbose_name='Rut cliente')
+    rut_trabajador = models.ForeignKey(trabajador, on_delete=models.CASCADE, null=True, verbose_name='Rut trabajador')
+    id_local = models.ForeignKey(local, on_delete=models.CASCADE, null=True, verbose_name='Id local')
+    id_tipo_pago = models.ForeignKey(metodo_pago, on_delete=models.CASCADE, null=True, verbose_name='Metodo de pago')
+    fecha = models.DateField(auto_now_add=False, null=True)
+    estado = models.CharField(max_length=30, null=True)
+    calificacion = models.IntegerField()
+    
+    def __str__(self):
+        return self.estado
+       
+   
+    
+class detalle_pedido(models.Model):
+    id_producto = models.ForeignKey(producto, null=True, on_delete=models.CASCADE)
+    id_pedido = models.ForeignKey( pedido, on_delete=models.CASCADE, null=True)
+    cantidad = models.ImageField()
+    
+    def __str__(self):
+        return self.id_pedido, self.id_producto
