@@ -37,7 +37,7 @@ class local(models.Model):
     
 class promocion(models.Model):
     id_local = models.ForeignKey(local, on_delete=models.CASCADE)
-    descripcion_promo = models.CharField(max_length=50, null=True, verbose_name='Descripcion')
+    descripcion_promo = models.TextField(max_length=50, null=True, verbose_name='Descripcion')
     nombre_promo = models.CharField(max_length=50 , null=True, verbose_name='nombre')
     fecha_ini = models.DateField(auto_now_add=False, null=True, verbose_name='fecha inicio')
     fecha_fin = models.DateField(auto_now_add=False, null=True, verbose_name='fecha fin')
@@ -69,7 +69,7 @@ class trabajador(models.Model):
 
    
 class pedido(models.Model):
-    rut_cliente = models.ForeignKey(cliente, on_delete=models.CASCADE, null=True, verbose_name='Rut cliente')
+    rut_cliente = models.ForeignKey(cliente, on_delete=models.CASCADE,null=True, verbose_name='Rut cliente')
     rut_trabajador = models.ForeignKey(trabajador, on_delete=models.CASCADE, null=True, verbose_name='Rut trabajador')
     id_local = models.ForeignKey(local, on_delete=models.CASCADE, null=True, verbose_name='Id local')
     id_tipo_pago = models.ForeignKey(metodo_pago, on_delete=models.CASCADE, null=True, verbose_name='Metodo de pago')
@@ -78,14 +78,13 @@ class pedido(models.Model):
     calificacion = models.IntegerField()
     
     def __str__(self):
-        return self.estado
-       
-   
+        return self.id
+         
     
 class detalle_pedido(models.Model):
     id_producto = models.ForeignKey(producto, null=True, on_delete=models.CASCADE)
     id_pedido = models.ForeignKey( pedido, on_delete=models.CASCADE, null=True)
-    cantidad = models.ImageField()
+    cantidad = models.IntegerField()
     
     def __str__(self):
-        return self.id_pedido, self.id_producto
+        return self.id

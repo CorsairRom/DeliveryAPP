@@ -1,0 +1,25 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block contenido %}
+
+
+<div class="container">
+  <div class="row">
+    {% for item in categorias %}
+    <div class="col-4">
+      <div class="card my-2">
+          <img class="card-img-top" src= '{{item.strCategoryThumb}}' alt="Card image cap">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{item.strCategory}}</h5> 
+            <a href="{% url 'food' item.strCategory %}" class="btn btn-primary">PEDIR</a>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+  
+
+{% endblock contenido %}
