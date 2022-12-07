@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from .forms import Custom, ClienteForm
-from .models import cliente
+from .forms import Custom, ClienteForm, DireccionesForm
+from .models import cliente, direccion
 from django.db import connection
 import logging
 from django.contrib import messages
@@ -27,8 +27,27 @@ def get_data():
 
 
 def index(request):
+    
+    
+    data1 = {}
+    data2 = {}
+    data3 = {}
+    for x in range(1,4):
+        response = requests.get('https://www.themealdb.com/api/json/v1/1/random.php')
+        meal = response.json()
+        if x==1: data1.update(meal);
+        if x==2: data2.update(meal);
+        if x==3: data3.update(meal);
+
+    random1 = data1['meals']
+    random2 = data2['meals']
+    random3 = data3['meals']
+    
     data = {
-        'cli': get_data()
+        'cli': get_data(),
+        'random1': random1,
+        'random2': random2,
+        'random3': random3
     }
     return render(request, 'crud/index.html', data)
 
@@ -102,6 +121,20 @@ def food (request, name):
     
     return render(request, 'crud/food.html', data)
 
-def prueba (request):
-    
-    return render(request, 'crud/prueba.html')
+def setDireccion (request):
+    client = cliente.objects.get(username_id = request.user.id)
+    ctx ={
+        "form": DireccionesForm
+    }
+    if request.method == "POST":
+        form = DireccionesForm(data = request.POST)
+        if form.is_valid():
+            form.save()
+            datos = form.cleaned_data
+            dir = direccion()
+            dir.nombre_dir=datos.get('nombre_dir')
+            dir.descripcion = datos.get('descripcion')
+            dir.cliente_dir = client
+            dir.save()
+            return redirect(perfil)
+    return render(request, 'crud/direccion.html', ctx)

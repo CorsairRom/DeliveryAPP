@@ -1,5 +1,10 @@
 
 
+
+button  a:any-link{
+    text-decoration: none !important;
+    color: white;
+}
 .card {
     width: 350px;
     background-color: #efefef;
@@ -79,4 +84,9 @@ hr .new1 {
 
 .date {
     background-color: #ccc
+}
+
+.ig{
+    height: 70vh;
+    object-fit: cover;
 }
