@@ -6,7 +6,7 @@ button  a:any-link{
     color: white;
 }
 .card {
-    width: 350px;
+    width: 50%;
     background-color: #efefef;
     border: none;
     cursor: pointer;
@@ -90,3 +90,9 @@ hr .new1 {
     height: 70vh;
     object-fit: cover;
 }
+
+@media (max-width: 980px) {
+    .card {
+      width: 90%;
+    }
+  }

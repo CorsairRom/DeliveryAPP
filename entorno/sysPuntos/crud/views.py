@@ -71,10 +71,16 @@ def register(request):
 
 def perfil(request):
     client = cliente.objects.get(username_id = request.user.id)
+    dir = direccion.objects.filter(cliente_dir = client)
     data = {
-        "cliente": client
+        "cliente": client,
+        "direccion": dir
     }
-    print(client.nombre)
+    # name = request.GET.get("trash")
+    if request.GET.get("trash"):
+        print("boton precionado")
+    # print(name)
+    
     return render(request, 'crud/perfil.html', data)
 
 def CreateCliente(request):

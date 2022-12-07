@@ -22,9 +22,6 @@
           <div class="d-flex flex-row justify-content-center align-items-center gap-2">
               <span class="idd1"> {{cliente.rut_cliente}} </span>
           </div> 
-          {% comment %} <div class="d-flex flex-row justify-content-center align-items-center mt-3">
-              <span class="number">1069 <span class="follow">Followers</span></span>
-          </div> {% endcomment %}
           <div class=" d-flex mt-2">
               <button class="btn1 btn-dark"> <a class="text-light" href="{% url 'direccion' %}">Agregar direccion</a></button>
           </div>
@@ -33,16 +30,39 @@
             <p>Direccion principal:</p>
             <span> {{cliente.direccion_cli}} </span>
             <p>Direccion Secundarias:</p>
+            
+            {% comment %} <p> , {{item.descripcion}}</p> {% endcomment %}
+            
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Dirección</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in direccion %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{{item.nombre_dir}}</td>
+                  <form action="" method="GET">
+                  <td>
+                    <button class="btn-dark rounded" type="submit" name="trash"><i class="fa-solid fa-trash"></i></button>
+                     | 
+                    <button class="btn-dark rounded" type="submit" name="trash"><i class="fa-solid fa-gear"></i>  </i></button> 
+                  </td>
+                </form>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
-          {% comment %} <div class="gap-3 mt-3 icons d-flex flex-row justify-content-center align-items-center"> <span><i
-                      class="fa fa-twitter"></i></span> <span><i class="fa fa-facebook-f"></i></span> <span><i
-                      class="fa fa-instagram"></i></span> <span><i class="fa fa-linkedin"></i></span> </div>
-          <div class=" px-2 rounded mt-4 date "> <span class="join">Joined May,2021</span> </div> {% endcomment %}
       </div>
   </div>
 </div>
 <br>  
-<div class="container d-flex flex-row justify-content-center align-items-center">
+<div class="container d-flex flex-row justify-content-center align-items-center mb-4">
   <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger mx-2">Cerrar Sesion</button></a>
 </div> 
     
