@@ -11,7 +11,10 @@
             <img class="card-img-top" src= '{{item.strMealThumb}}' alt="Card image cap">
             <div class="card-body text-center">
               <h5 class="card-title">{{item.strMeal}}</h5> 
-              <a href="" class="btn btn-dark">PEDIR</a>
+              <form action="" method="GET">
+                <button class="btn-dark rounded" type="submit" name="pedir">Pedir</button>
+                {% comment %} <a href="" name="pedir" type="submit" class="btn btn-dark">PEDIR</a> {% endcomment %}
+              </form>
             </div>
           </div>
       </div>

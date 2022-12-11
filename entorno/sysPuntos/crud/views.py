@@ -27,8 +27,6 @@ def get_data():
 
 
 def index(request):
-    
-    
     data1 = {}
     data2 = {}
     data3 = {}
@@ -72,15 +70,24 @@ def register(request):
 def perfil(request):
     client = cliente.objects.get(username_id = request.user.id)
     dir = direccion.objects.filter(cliente_dir = client)
+    texto = "prueba"
+    if 'cambiar' in request.POST:
+        # texto = request.POST['dir']
+        # direc = "none"
+        # direc = request.POST["recipient-id"]
+        # print("boton precionado cambiar")
+        # print(texto)
+        # print(direc)
+        print(request.POST)
+        redirect(perfil)
+        
+    if 'edit' in request.GET:
+        print("boton precionado edit")
     data = {
         "cliente": client,
-        "direccion": dir
+        "direccion": dir,
+        "texto": texto
     }
-    # name = request.GET.get("trash")
-    if request.GET.get("trash"):
-        print("boton precionado")
-    # print(name)
-    
     return render(request, 'crud/perfil.html', data)
 
 def CreateCliente(request):
@@ -120,11 +127,12 @@ def categoria(request):
 def food (request, name):
     reponse = requests.get(f'https://www.themealdb.com/api/json/v1/1/filter.php?c={name}')
     meals = reponse.json()
+    if 'pedir' in request.GET:
+        print("boton precionado pedir")
+        
     data = {
         'food':meals['meals']
     }
-    # print(meals['meals'])
-    
     return render(request, 'crud/food.html', data)
 
 def setDireccion (request):
@@ -144,3 +152,27 @@ def setDireccion (request):
             dir.save()
             return redirect(perfil)
     return render(request, 'crud/direccion.html', ctx)
+
+def comprar (request):
+    if 'cambiar' in request.POST:
+        texto = str(request.POST['dir'] )
+        print("boton precionado cambiar")
+        print(texto)
+        redirect(perfil)
+    ctx = {
+        
+    }
+    
+    return render(request, 'crud/compra.html', ctx)
+
+def modifiedDir(request, id, text):
+    address = direccion.objects.get(id = id)
+    # address.nombre_dir = text
+    # address.save()
+    print(address)
+    print("en addressss---------------------------")
+    return redirect(perfil)
+
+def deleteDir(request, id):
+    
+    return redirect(perfil)

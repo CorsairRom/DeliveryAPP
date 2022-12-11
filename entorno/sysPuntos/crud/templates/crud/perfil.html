@@ -1,72 +1,111 @@
 {% extends 'crud/base.html' %}
 {% load static %}
 {% block contenido %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="{% static '/css/style.css' %}">
 <style>
-  body{
+  body {
     background-image: url({% static 'img/perfil/background1.jpg' %});
     background-size: cover;
     background-repeat: no-repeat;
   }
-    
 </style>
 
 <div class="container d-flex justify-content-center my-4">
   <div class="card p-4">
-      <div class=" image d-flex flex-column justify-content-center align-items-center">
-          <button id='btn' class="btn btn-secondary"> <img src=" {% static 'img/perfil/men_perfil.png' %} " height="100"
-                  width="100" /></button>
-          <span class="name mt-3"> {{cliente.nombre}} {{cliente.apellido_pa}} </span>
-          <span class="idd">@{{request.user.username}}</span>
-          <div class="d-flex flex-row justify-content-center align-items-center gap-2">
-              <span class="idd1"> {{cliente.rut_cliente}} </span>
-          </div> 
-          <div class=" d-flex mt-2">
-              <button class="btn1 btn-dark"> <a class="text-light" href="{% url 'direccion' %}">Agregar direccion</a></button>
-          </div>
-          <div class="text mt-3 text-center" >
-            <h4> Mis direcciones </h4>
-            <p>Direccion principal:</p>
-            <span> {{cliente.direccion_cli}} </span>
-            <p>Direccion Secundarias:</p>
-            
-            {% comment %} <p> , {{item.descripcion}}</p> {% endcomment %}
-            
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Dirección</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in direccion %}
-                <tr>
-                  <th scope="row">{{ forloop.counter }}</th>
-                  <td>{{item.nombre_dir}}</td>
-                  <form action="" method="GET">
-                  <td>
-                    <button class="btn-dark rounded" type="submit" name="trash"><i class="fa-solid fa-trash"></i></button>
-                     | 
-                    <button class="btn-dark rounded" type="submit" name="trash"><i class="fa-solid fa-gear"></i>  </i></button> 
-                  </td>
-                </form>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+    <div class=" image d-flex flex-column justify-content-center align-items-center">
+      <button id='btn' class="btn btn-secondary"> <img src=" {% static 'img/perfil/men_perfil.png' %} " height="100"
+          width="100" /></button>
+      <span class="name mt-3"> {{cliente.nombre}} {{cliente.apellido_pa}} </span>
+      <span class="idd">@{{request.user.username}}</span>
+      <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+        <span class="idd1"> {{cliente.rut_cliente}} </span>
       </div>
+      <div class=" d-flex mt-2">
+        <button class="btn1 btn-dark"> <a class="text-light" href="{% url 'direccion' %}">Agregar direccion</a></button>
+      </div>
+      <div class="text mt-3 text-center">
+        <h4> Mis direcciones </h4>
+        <p>Direccion principal:</p>
+        <span> {{cliente.direccion_cli}} </span>
+        <p>Direccion Secundarias:</p>
+
+        {% comment %} <p> , {{item.descripcion}}</p> {% endcomment %}
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Dirección</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in direccion %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{item.nombre_dir}}</td>
+              
+                <td>
+                  <button class="btn-dark rounded" type="submit" name="trash"><i class="fa-solid fa-trash"></i></button>
+                  |
+
+                  <button type="submit" class="btn btn-dark rounded" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" data-bs-whatever="modificar" name="edit"><i
+                      class="fa-solid fa-gear"></i>
+                      <a href="{% url 'modifiedDir' item.id texto %}"></a>
+                    </button>
+
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar Dirección</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="POST">
+                            {% csrf_token %}
+                             <div class="mb-3">
+                              <label for="recipient-id" class="col-form-label">Id Direccion:</label>
+                              <input type="text" class="form-control" id="recipient-id" name="recipient-id" value="{{item.id}}" disabled>      
+                            </div> 
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Nueva Dirección:</label>
+                              <input type="text" class="form-control" id="recipient-name" name="dir" value="nueva direccion de richard">                              
+                            </div> 
+
+                            <div class="alert alert-danger text-center" role="alert" id="alerta" style="display: none;">
+                              Dirección inválida!
+                            </div>
+
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-dark" name="cambiar" id="btn-cambiar"
+                              onclick="comprobar(event)">Cambiar</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </td>
+              
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
-<br>  
+<br>
 <div class="container d-flex flex-row justify-content-center align-items-center mb-4">
   <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger mx-2">Cerrar Sesion</button></a>
-</div> 
-    
+</div>
 
+<button class="btn-dark rounded" type="submit" name="edit"><i class="fa-solid fa-gear"></i></i></button>
 
 
 {% endblock contenido %}

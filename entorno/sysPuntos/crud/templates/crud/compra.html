@@ -1,0 +1,39 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block contenido %}
+<div class="container">
+    <button type="submit" class="btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        data-bs-whatever="modificar"><i class="fa-solid fa-trash"></i></button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar Dirección</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Dirección:</label>
+                            <input type="text" class="form-control" id="recipient-name" name="dir">
+                        </div>
+                        
+                        <div class="alert alert-danger text-center" role="alert" id="alerta" style="display: none;">
+                            Dirección inválida!
+                        </div>
+                        
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark" name="cambiar" id="btn-cambiar" onclick="comprobar(event)">Cambiar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+{% endblock contenido %}
+
