@@ -8,7 +8,9 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 import requests
-
+import cx_Oracle
+from .conexion import clientes
+import random, string
 
 # Create your views here.
 
@@ -20,24 +22,41 @@ def get_data():
     django_cursor.callproc("sp_get_user", [out_cursor])
     lista = []
     for fila in out_cursor:
-        lista.append(fila)
-    
+        lista.append(fila)    
     return lista
 
+def revisarMySQL():
+    #creo una conexión a oracle
+    conOra = cx_Oracle.connect(
+        user='c##arqDBF',
+        password='oracle1',
+        dsn='localhost:1521/xe',
+        encoding="UTF-8"
+    )
+    #tomo todos los registros de clientes de oracle
+    curOra = conOra.cursor()
+    curOra2 = conOra.cursor()
+    curOra3 = conOra.cursor()
+    curOra.execute('SELECT * FROM crud_local')
+    cliOra = curOra.fetchall()
 
+    #recorro los clientes de MySQL
+    for m in clientes:
+        if m not in cliOra:
+            curOra2.execute(f"INSERT INTO crud_local VALUES('{m[0]}', '{m[1]}', '{m[2]}')")
+    conOra.commit()
 
 def index(request):
-    
-    
+    revisarMySQL()
     data1 = {}
     data2 = {}
     data3 = {}
     for x in range(1,4):
         response = requests.get('https://www.themealdb.com/api/json/v1/1/random.php')
         meal = response.json()
-        if x==1: data1.update(meal);
-        if x==2: data2.update(meal);
-        if x==3: data3.update(meal);
+        if x==1: data1.update(meal)
+        if x==2: data2.update(meal)
+        if x==3: data3.update(meal)
 
     random1 = data1['meals']
     random2 = data2['meals']
@@ -64,7 +83,6 @@ def register(request):
             psw = dataform.get("password1")
             user = authenticate(username= usr, password = psw)
             login(request, prueba)
-            # print("esto es un print")
             return redirect(to="CreateCliente")
         data["form"]= formulario    
     return render(request, 'registration/register.html', data)
@@ -84,7 +102,6 @@ def perfil(request):
     return render(request, 'crud/perfil.html', data)
 
 def CreateCliente(request):
-    
     context = {
         "form": ClienteForm
     }
@@ -94,6 +111,7 @@ def CreateCliente(request):
             form.save()
             datos = form.cleaned_data
             cli = cliente()
+            print(cli)
             cli.username = request.user
             cli.rut_cliente = datos.get("rut_cliente")
             cli.direccion_cli = datos.get("direccion_cli")
@@ -117,7 +135,7 @@ def categoria(request):
     #     print(item['idCategory'])
     return render( request, 'crud/categoria.html', data)
 
-def food (request, name):
+def food(request, name):
     reponse = requests.get(f'https://www.themealdb.com/api/json/v1/1/filter.php?c={name}')
     meals = reponse.json()
     data = {
@@ -144,3 +162,6 @@ def setDireccion (request):
             dir.save()
             return redirect(perfil)
     return render(request, 'crud/direccion.html', ctx)
+
+def historial(request):
+    return render(request, 'crud/historial.html')

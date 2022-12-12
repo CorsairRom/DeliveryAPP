@@ -4,14 +4,13 @@
 {% load django_bootstrap5 %}
 
 {% block contenido %}
-
     <div class="container">
         
         <div class="row">
             
             <div class="col-12 col-md-6 offset-md-3 mt-3 border rounded shadow p-3">
-                <h3>Iniciar Sesión</h3>
-                <form action="" method="post">
+                <h3 style="color:white">Iniciar Sesión</h3>
+                <form style="color:white" action="" method="post">
                     {% csrf_token %}
                     {% bootstrap_form form %}
                     {% comment %} {{form|crispy}} {% endcomment %}

@@ -1,0 +1,41 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static '/css/style.css' %}">
+
+<div style="text-align: center;" class="container">
+    <table style="color:white;text-align: center;" class="table table-striped table-dark">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Comida</th>
+            <th scope="col">Fecha pedido</th>
+            <th scope="col">Restaurant</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Beef and Mustard Pie</td>
+            <td>Sábado 10 de Diciembre, 2022</td>
+            <td>Los antojos</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Beef Wellington</td>
+            <td>Martes 6 de Diciembre, 2022</td>
+            <td>Orgullo Peruano</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Roast fennel and aubergine paella</td>
+            <td>Jueves 1 de Diciembre, 2022</td>
+            <td>Vista frente al mar</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock contenido %}
