@@ -438,7 +438,7 @@ REM INSERTING into C##ARQDBF.AUTH_USER_USER_PERMISSIONS
 SET DEFINE OFF;
 REM INSERTING into C##ARQDBF.CRUD_CLIENTE
 SET DEFINE OFF;
-Insert into C##ARQDBF.CRUD_CLIENTE (RUT_CLIENTE,DIRECCION_CLI,NOMBRE,APELLIDO_PA,APELLIDO_MA,USERNAME_ID) values ('20396431-7','calle siempre viva 123','yaiseon','rivera','nu�ez','42');
+Insert into C##ARQDBF.CRUD_CLIENTE (RUT_CLIENTE,DIRECCION_CLI,NOMBRE,APELLIDO_PA,APELLIDO_MA,USERNAME_ID) values ('20396431-7','calle siempre viva 123','yaiseon','rivera','nu�ez','42');
 Insert into C##ARQDBF.CRUD_CLIENTE (RUT_CLIENTE,DIRECCION_CLI,NOMBRE,APELLIDO_PA,APELLIDO_MA,USERNAME_ID) values ('18202300-0','los muermos 8122','richard','Romero','Moore','1');
 Insert into C##ARQDBF.CRUD_CLIENTE (RUT_CLIENTE,DIRECCION_CLI,NOMBRE,APELLIDO_PA,APELLIDO_MA,USERNAME_ID) values ('11111111-1','los muermos 8122','patricia','cabezas','navarrete','22');
 REM INSERTING into C##ARQDBF.CRUD_DETALLE_PEDIDO
@@ -815,6 +815,42 @@ END;
 END;
 
 /
+----------------------------------------------------------
+    --DDL for package pkg_direccion
+----------------------------------------------------------
+CREATE OR REPLACE PACKAGE pkg_direccion IS
+    PROCEDURE sp_createDir(p_id NUMBER, p_rutCli VARCHAR2, p_nomDir VARCHAR2, p_desc VARCHAR2);
+    PROCEDURE sp_updateDir(p_id NUMBER, p_rutCli VARCHAR2, p_nomDir VARCHAR2, p_desc VARCHAR2);
+    PROCEDURE sp_deleteDir(p_id NUMBER, p_rutCli VARCHAR2);
+END;
+----------------------------------------------------------
+    --DDL for package body pkg_direccion
+----------------------------------------------------------
+
+CREATE OR REPLACE PACKAGE BODY pkg_direccion IS
+        --Procedimiento que crea una dirección
+    PROCEDURE sp_createDir(p_id NUMBER, p_rutCli VARCHAR2, p_nomDir VARCHAR2, p_desc VARCHAR2) IS
+    BEGIN
+        INSERT INTO crud_direccion VALUES(p_id, p_nomDir, p_desc, p_rutCli);
+    END;
+        --Procedimiento que actualiza una dirección
+    PROCEDURE sp_updateDir(p_id NUMBER, p_rutCli VARCHAR2, p_nomDir VARCHAR2, p_desc VARCHAR2) IS
+    BEGIN
+        UPDATE crud_direccion
+        SET nombre_dir = p_nomDir, descripcion= p_desc
+        WHERE p_rutCli = cliente_dir_id AND p_id = id;
+    END;
+        --Procedimiento que elimina una dirección
+    PROCEDURE sp_deleteDir(p_id NUMBER, p_rutCli VARCHAR2) IS
+    BEGIN
+        DELETE FROM crud_direccion
+        WHERE p_rutCli = cliente_dir_id AND p_id = id;
+    END;
+END;
+
+
+
+
 --------------------------------------------------------
 --  DDL for Function FN_GET
 --------------------------------------------------------
