@@ -1,11 +1,14 @@
 import random
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
 from crud.Carrito import Carrito
+from crud.Lista import Listado
+from crud.context_processor import total_carrito
 from .forms import Custom, ClienteForm, DireccionesForm
-from .models import cliente, direccion, producto
+from .models import cliente, detalle_pedido, direccion, metodo_pago, pedido, producto, trabajador, local
 from django.db import connection
 import logging
 from django.contrib import messages
@@ -15,6 +18,8 @@ import requests
 
 # Create your views here.
 
+
+# get data client
 def get_data():
     django_cursor = connection.cursor()
     int_cursor = django_cursor.connection.cursor()
@@ -214,6 +219,8 @@ def comprar (request):
     
     return render(request, 'crud/compra.html', ctx)
 
+# carro de compras
+
 def carro(request):
     client = cliente.objects.get(username_id = request.user.id)
     ctx = {
@@ -222,35 +229,100 @@ def carro(request):
     return render(request, "crud/carro.html", ctx)
 
 def eliminar(request, id):
-    producto = id
-    producto.delete()
+    product = get_object_or_404(producto, id=id)
+    product.delete()
     return redirect(perfil, 2)
 
-def agregar(request, producto_id, pagina):
+def agregar(request, producto_id):
     carrito = Carrito(request)
-    producto = producto_id
-    carrito.agregar(producto)
-    return redirect(pagina)
+    product = producto.objects.get(id=producto_id)
+    carrito.agregar(product)
+    return redirect(categoria)
 
 def eliminar_producto(request, producto_id):
     carrito = Carrito(request)
-    producto = producto_id
-    carrito.eliminar(producto)
+    product = producto.objects.get(id=producto_id)
+    carrito.eliminar(product)
     return redirect("carro")
 
 def restar_producto(request, producto_id):
     carrito = Carrito(request)
-    producto = producto_id
-    carrito.restar(producto)
+    product = producto.objects.get(id=producto_id)
+    carrito.restar(product)
     return redirect("carro")
 
 def sumar_producto(request, producto_id):
     carrito = Carrito(request)
-    producto = producto_id
-    carrito.sumar(producto)
+    product = producto.objects.get(id=producto_id)
+    carrito.sumar(product)
     return redirect("carro")
     
 def limpiar_carrito(request):
     carrito = Carrito(request)
     carrito.limpiar()
     return redirect("carro")
+
+def guardar(request):
+    usuario = request.user
+    tot_carrito = total_carrito(request)
+    carrito = Carrito(request)
+    total = tot_carrito["total_carrito"]
+    client = cliente.objects.get(username_id = usuario.id)
+    trab = trabajador.objects.get(rut_trabajador = '18200400-1')
+    loc = local.objects.get(id = 2)
+    pago = metodo_pago.objects.get(id =2)
+    venta = pedido()
+    venta.rut_cliente = client
+    venta.rut_trabajador = trab
+    venta.id_local = loc
+    venta.id_tipo_pago = pago
+    venta.estado = 'Pagado'
+    venta.calificacion = 5
+    venta.total = total
+    venta.save()
+    venta_actual = pedido.objects.get(id = venta.id)
+    if "carrito" in request.session.keys():
+        for key, value in request.session["carrito"].items():
+            product = producto.objects.get(id = int(value["producto_id"]))
+            pedid = pedido.objects.get(id = venta_actual.id)
+            detalle = detalle_pedido(id_pedido = pedid, id_producto = product, cantidad = int(value["cantidad"]), precio = int(value["precio"]) )
+            detalle.save()
+            
+    carrito.limpiar()
+    return redirect(perfil)  
+
+def historial(request):
+    user = request.user
+    client = cliente.objects.get(username_id=user.id)
+    ventas = pedido.objects.filter(rut_cliente = client.rut_cliente)
+    ctx = {
+        "ventas":ventas,
+    }
+    
+    return render(request, 'crud/historial.html', ctx)
+
+def borrar_registro(request, venta_id):
+    venta = pedido.objects.get(id = venta_id) 
+    venta.delete()
+    return redirect(historial)
+
+def ver_detalle(request, venta_id):
+    
+    # detalle_venta = detalle_pedido.objects.filter(id_pedido = venta_id)
+    # print(str(detalle_venta[0]))
+    
+    detalle_venta = detalle_pedido
+    productos = producto
+    pro = producto.objects.get(id = 52894)
+    listado = Listado(request)
+    print(pro)
+    listado.agregar(productos, venta_id, detalle_venta)
+    
+    return  redirect(historial)
+
+def limpiar_lista(request, venta_id):
+    detalle_venta = detalle_pedido
+    
+    lista = Listado(request)
+    lista.limpiar(detalle_venta, venta_id)
+    return redirect(historial)

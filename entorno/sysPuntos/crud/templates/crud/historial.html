@@ -1,0 +1,121 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block contenido %}
+
+{% load humanize %}
+{% load humanize %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+    .table-nostriped tbody tr:nth-of-type(odd) {
+        background-color: transparent;
+    }
+
+    @media only screen and (max-width:1000px) {
+
+        #no-more-tables tbody,
+        #no-more-tables tr,
+        #no-more-tables td {
+            display: block;
+        }
+
+        #no-more-tables thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        #no-more-tables td {
+            position: relative;
+            padding-left: 50%;
+            border: none;
+            border-bottom: 2px solid #eee;
+        }
+
+        #no-more-tables td:before {
+            content: attr(data-title);
+            position: absolute;
+            left: 6px;
+            font-weight: bold;
+        }
+
+        #no-more-tables tr {
+            border-bottom: 1px solid #ccc;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="table-responsive" id="no-more-tables">
+    <table class="table text-light">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Total</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in ventas %}
+            <tr>
+                <td data-title="ID">{{v.id}}</td>
+                <td data-title="Total">${{v.total|intcomma}}</td>
+                <td data-title="Fecha">{{v.hora}}</td>
+                <td data-title="Estado">{{v.estado}}</td>
+                <td data-title="Accion">
+                    <a href="{% url 'ver_detalle' v.id %}" class="btn btn-sm btn-info btn-detalle">Detalle</a>
+                    |
+                    <a href="{% url 'borrar_registro' v.id %}" class="btn btn-sm btn-warning">Eliminar</a>
+                </td>
+            </tr>
+            <!-- tabla extendida -->
+            <tr>
+                {% for v.id in request.session.lista.items %}
+                {% if forloop.last %}
+                <td data-title="Detalles">
+                    <div class="table-responsive text-light" id="no-more-tables">
+                        <table class="table text-light">
+                            {% if request.session.lista.items %}
+                            {% for key, value in request.session.lista.items %}
+                            <thead>
+                                {% if value.id_venta == v.id %}
+                                <!-- {% if forloop.first %} -->
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Accion</th>
+                                </tr>
+                                <!-- {% endif %} -->
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-title="ID">{{value.pro_id}}</td>
+                                    <td data-title="Producto">{{value.nombre_producto}}</td>
+                                    <td data-title="Cantidad">{{value.cantidad}}</td>
+                                    <td data-title="Precio">{{value.precio}}</td>
+                                    <td data-title="Accion"><a href="{% url 'limpiar_lista' v.id %}"
+                                            class="btn btn-outline-secondary">-</a></td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                {% endif %} {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+</script>
+{% endblock contenido %}

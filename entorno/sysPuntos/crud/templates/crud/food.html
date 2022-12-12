@@ -12,8 +12,8 @@
             <div class="card-body text-center">
               <h5 class="card-title">{{item.strMeal}}</h5> 
               <form action="" method="GET">
-                <button class="btn-dark rounded" type="submit" name="pedir">Pedir</button>
-                {% comment %} <a href="" name="pedir" type="submit" class="btn btn-dark">PEDIR</a> {% endcomment %}
+                {% comment %} <button class="btn-dark rounded" type="submit" name="pedir">Pedir</button> {% endcomment %}
+                <a href="{% url 'agregar' item.idMeal %}" name="pedir" type="submit" class="btn btn-dark">PEDIR</a>
               </form>
             </div>
           </div>
