@@ -46,52 +46,52 @@
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
               <td>{{item.nombre_dir}}</td>
-              
-                <td>
-                  <button class="btn-dark rounded" type="submit" name="trash"><i class="fa-solid fa-trash"></i></button>
-                  |
 
-                  <button type="submit" class="btn btn-dark rounded" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" data-bs-whatever="modificar" name="edit"><i
-                      class="fa-solid fa-gear"></i>
-                      <a href="{% url 'modifiedDir' item.id texto %}"></a>
-                    </button>
+              <td id="td-btn">
 
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar Dirección</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <form method="POST">
-                            {% csrf_token %}
-                             <div class="mb-3">
-                              <label for="recipient-id" class="col-form-label">Id Direccion:</label>
-                              <input type="text" class="form-control" id="recipient-id" name="recipient-id" value="{{item.id}}" disabled>      
-                            </div> 
-                            <div class="mb-3">
-                              <label for="recipient-name" class="col-form-label">Nueva Dirección:</label>
-                              <input type="text" class="form-control" id="recipient-name" name="dir" value="nueva direccion de richard">                              
-                            </div> 
+                <button type="button" class="btn btn-dark rounded" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  data-bs-whatever="modificar" name="edit" id="btn-edit" onclick="getid({{item.id}})"><i
+                    class="fa-solid fa-gear"></i>
+                  
+                </button>
+                <label class="col-form-label" id="{{item.id}}" style="display:none;"> {{item.id}}</label>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar Dirección</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
 
-                            <div class="alert alert-danger text-center" role="alert" id="alerta" style="display: none;">
-                              Dirección inválida!
-                            </div>
+                      <div class="modal-body" onclick="disabled()">
+                        <form method="POST">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                            <input type="text" class="form-control" id="recipient-id" name="recipient-id"
+                              style="display:none">
+                          </div>
+                          <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Nueva Dirección:</label>
+                            <input type="text" class="form-control" id="recipient-name" name="dir">
+                          </div>
 
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-dark" name="cambiar" id="btn-cambiar"
-                              onclick="comprobar(event)">Cambiar</button>
-                          </form>
-                        </div>
+                          <div class="alert alert-danger text-center" role="alert" id="alerta" style="display: none;">
+                            Dirección inválida!
+                          </div>
+                          
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-warning" name="eliminar" id="btn-del"><i class="fa-solid fa-trash"></i></button>
+                          <button type="submit" class="btn btn-dark" name="cambiar" id="btn-cambiar"
+                            onclick="comprobar(event)">Cambiar</button>
+                        </form>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                </td>
-              
+              </td>
+
             </tr>
             {% endfor %}
           </tbody>
@@ -105,7 +105,7 @@
   <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger mx-2">Cerrar Sesion</button></a>
 </div>
 
-<button class="btn-dark rounded" type="submit" name="edit"><i class="fa-solid fa-gear"></i></i></button>
+
 
 
 {% endblock contenido %}

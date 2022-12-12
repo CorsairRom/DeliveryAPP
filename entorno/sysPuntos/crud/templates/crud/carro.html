@@ -1,0 +1,82 @@
+{% extends 'crud/base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block contenido %}
+
+{% comment %} {% load crispy_forms_tags%} {% endcomment %}
+{% load humanize %}
+    <div class="container text-light ">
+        <div class="row">
+            <div class="col-12 col-md-12 table-responsive-sm ">
+
+
+                <div class="text-center text-light">
+                    <h4 class="display-6">Carrito</h4>
+                </div>
+                
+                <table class="table table-hover text-light">
+                <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Precio</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Subtotal</th>
+                      <th scope="col">Accion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% if request.session.carrito.items %}
+                  {% for key, value in request.session.carrito.items %}
+                    <tr>
+                      <th scope="row">{{value.nombre}}</th>
+                      <td>${{value.precio|intcomma}}</td>
+                      <td>{{value.cantidad}}</td>
+                      <td>${{value.acumulado|intcomma}}</td>
+                      <td>
+                        <a href="{% url 'sumar' value.producto_id %}" class="badge btn btn-dark badge-dark">+</a>
+                        <a href="{% url 'restar' value.producto_id %}" class="badge btn btn-dark badge-dark">-</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                      <td colspan="6">
+                          <div class="alert alert-danger text-center"> Sin Productos </div>
+                      </td>
+                  </tr>
+                  {% endif %}
+                    <tr>
+                      
+                      <th scope="row" colspan="1" class="text-end" >Total:</th>
+                      <td colspan="1">$ {{total_carrito|intcomma}}</td>
+                      
+                      
+                    </tr>
+                    <tr>
+                      {% if sub  %}
+                      <th scope="row" colspan="1" class="text-end" >Descuento:</th>
+                      <td colspan="1">$ {{porcentaje|intcomma}}</td>
+                      {% endif %}
+                    </tr>
+                    <tr>
+                      {% if sub  %}
+                      <th scope="row" colspan="1" class="text-end" >Total a pagar:</th>
+                      <td colspan="1">$ {{descuento|intcomma}}</td>
+                      {% endif %}
+                    </tr>
+                  </tbody>
+                </table>
+                <hr>
+                
+                <div class="row text-center">
+                    <div class="col-6"><a href="{% url 'limpiar' %}" class="btn btn-danger">Cancelar</a></div>
+                    {% comment %} <div class="col-6"><a href="{% url 'guardar'%}" class="btn btn-success">Guardar</a></div> {% endcomment %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock contenido %}

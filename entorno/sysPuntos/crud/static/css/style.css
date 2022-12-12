@@ -89,6 +89,7 @@ hr .new1 {
 .ig{
     height: 70vh;
     object-fit: cover;
+    object-position: 50% 50%;
 }
 
 @media (max-width: 980px) {

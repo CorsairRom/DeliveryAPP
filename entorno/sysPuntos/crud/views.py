@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+
+from crud.Carrito import Carrito
 from .forms import Custom, ClienteForm, DireccionesForm
 from .models import cliente, direccion
 from django.db import connection
@@ -71,18 +73,25 @@ def perfil(request):
     client = cliente.objects.get(username_id = request.user.id)
     dir = direccion.objects.filter(cliente_dir = client)
     texto = "prueba"
+    
+    
     if 'cambiar' in request.POST:
-        # texto = request.POST['dir']
-        # direc = "none"
-        # direc = request.POST["recipient-id"]
-        # print("boton precionado cambiar")
-        # print(texto)
-        # print(direc)
-        print(request.POST)
-        redirect(perfil)
+        texto = request.POST.get('dir')
+        direccion_id = request.POST.get("recipient-id")
+        dir_mod= direccion.objects.get(id = direccion_id)
+        dir_mod.nombre_dir = texto
+        dir_mod.save()
+        print(dir_mod)
+        # redirect(perfil)
         
-    if 'edit' in request.GET:
-        print("boton precionado edit")
+    if 'eliminar' in request.POST:
+        direccion_idd = request.POST.get("recipient-id")
+        dir_del= direccion.objects.get(id = direccion_idd)
+        dir_del.delete()
+        
+        
+        
+        
     data = {
         "cliente": client,
         "direccion": dir,
@@ -153,6 +162,10 @@ def setDireccion (request):
             return redirect(perfil)
     return render(request, 'crud/direccion.html', ctx)
 
+    
+
+
+
 def comprar (request):
     if 'cambiar' in request.POST:
         texto = str(request.POST['dir'] )
@@ -165,14 +178,43 @@ def comprar (request):
     
     return render(request, 'crud/compra.html', ctx)
 
-def modifiedDir(request, id, text):
-    address = direccion.objects.get(id = id)
-    # address.nombre_dir = text
-    # address.save()
-    print(address)
-    print("en addressss---------------------------")
-    return redirect(perfil)
+def carro(request):
+    client = cliente.objects.get(username_id = request.user.id)
+    ctx = {
+        
+    }
+    return render(request, "crud/carro.html", ctx)
 
-def deleteDir(request, id):
+def eliminar(request, id):
+    producto = id
+    producto.delete()
+    return redirect(perfil, 2)
+
+def agregar(request, producto_id, pagina):
+    carrito = Carrito(request)
+    producto = producto_id
+    carrito.agregar(producto)
+    return redirect(pagina)
+
+def eliminar_producto(request, producto_id):
+    carrito = Carrito(request)
+    producto = producto_id
+    carrito.eliminar(producto)
+    return redirect("carro")
+
+def restar_producto(request, producto_id):
+    carrito = Carrito(request)
+    producto = producto_id
+    carrito.restar(producto)
+    return redirect("carro")
+
+def sumar_producto(request, producto_id):
+    carrito = Carrito(request)
+    producto = producto_id
+    carrito.sumar(producto)
+    return redirect("carro")
     
-    return redirect(perfil)
+def limpiar_carrito(request):
+    carrito = Carrito(request)
+    carrito.limpiar()
+    return redirect("carro")

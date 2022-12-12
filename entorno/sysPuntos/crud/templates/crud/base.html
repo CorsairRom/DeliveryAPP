@@ -15,6 +15,7 @@
     background-image: url("{% static 'img/perfil/background1.jpg' %}");
     background-size: cover;
     background-repeat: no-repeat;
+    
   }
   .header .navbar {
     background-color: transparent !important;
@@ -46,7 +47,7 @@
                 <a class="nav-link text-light" href="{% url 'categoria' %}">Categoria</a>
               </li> 
               <li class="nav-item">
-                <a class="nav-link text-light" href="#"><i class="fa-solid fa-cart-shopping icono2"></i></a>
+                <a class="nav-link text-light" href="{% url 'carro' %}"><i class="fa-solid fa-cart-shopping icono2">{{total_contador}}</i></a>
               </li>
             </ul>
           </div>
@@ -110,12 +111,24 @@
     
   function comprobar(evt){
       const texto = document.getElementById("recipient-name").value;
+      
       console.log(texto);
+      
       if(texto.length < 8){
         evt.preventDefault();
         console.log("direccion invalid");
         document.getElementById("alerta").style.display = "block";
       }
+  }
+
+  function getid(id){
+    const id_dir = document.getElementById(id).textContent;
+    let val_id = document.getElementById("recipient-id").value = id;
+    console.log(id_dir);
+  }
+
+  function disabled(){
+    document.getElementById("recipient-id").style.display = "none";
   }
   
 </script>
