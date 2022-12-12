@@ -1,10 +1,11 @@
+import random
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
 from crud.Carrito import Carrito
 from .forms import Custom, ClienteForm, DireccionesForm
-from .models import cliente, direccion
+from .models import cliente, direccion, producto
 from django.db import connection
 import logging
 from django.contrib import messages
@@ -49,6 +50,42 @@ def index(request):
         'random2': random2,
         'random3': random3
     }
+    
+    if 'copy-data' in request.POST:
+        
+        print("estoy  en el copy-data")
+        # response_mealdb = requests.get('https://www.themealdb.com/api/json/v1/1/categories.php')
+        # categories = response_mealdb.json()
+        # cat = categories["categories"]
+
+        # def randomPrice():
+        #     precio = random.randrange(3500, 12000, 100)
+        #     return precio
+        # def randomStock():
+        #     stock = random.randrange(1, 30, 1)
+        #     return stock
+
+        # for item in cat:
+        #     strCategory = item['strCategory']
+        #     reponse_strCategory = requests.get(f'https://www.themealdb.com/api/json/v1/1/filter.php?c={strCategory}')
+        #     meals = reponse_strCategory.json()
+        #     meals_index = meals['meals']
+        #     for meal in meals_index:
+        #         print(meal['idMeal'])
+        #         print(meal['strMeal'])
+        #         print(randomPrice())
+        #         print(randomStock())
+                
+        #         pro = producto()
+        #         pro.id = meal['idMeal']
+        #         pro.nom_producto = meal['strMeal']
+        #         pro.precio = int(randomPrice())
+        #         pro.stock = int(randomStock())
+        #         pro.save()
+        #         print("------------")
+        #         print("Agregado!")
+                
+    
     return render(request, 'crud/index.html', data)
 
 def register(request):

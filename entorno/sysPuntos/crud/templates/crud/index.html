@@ -50,9 +50,11 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-      <div>
-        <h1 sytle="height: 200px;">
-        </h1>
+      <div class="container">
+        <form method="POST">
+          {% csrf_token %}
+        <button type="submit" class="btn btn-warning" name="copy-data" id="btn-del"><i class="fa-solid fa-trash"></i></button>
+        </form>
       </div>
 
 
