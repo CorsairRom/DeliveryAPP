@@ -107,7 +107,7 @@ def register(request):
             login(request, prueba)
             # print("esto es un print")
             return redirect(to="CreateCliente")
-        data["form"]= formulario
+        data["form"]= formulario    
     return render(request, 'registration/register.html', data)
 
 def perfil(request):
@@ -123,13 +123,14 @@ def perfil(request):
         dir_mod.nombre_dir = texto
         dir_mod.save()
         print(dir_mod)
+        # redirect(perfil)
         
     if 'eliminar' in request.POST:
         direccion_idd = request.POST.get("recipient-id")
         dir_del= direccion.objects.get(id = direccion_idd)
         dir_del.delete()
         
-    
+        
         
         
     data = {
@@ -166,6 +167,7 @@ def categoria(request):
     
     data = {
         'categorias' : category['categories'],
+        
     }
     # print(category['categories'])
     # for item in category['categories']:
