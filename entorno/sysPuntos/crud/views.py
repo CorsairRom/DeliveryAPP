@@ -54,36 +54,36 @@ def index(request):
     if 'copy-data' in request.POST:
         
         print("estoy  en el copy-data")
-        # response_mealdb = requests.get('https://www.themealdb.com/api/json/v1/1/categories.php')
-        # categories = response_mealdb.json()
-        # cat = categories["categories"]
+        response_mealdb = requests.get('https://www.themealdb.com/api/json/v1/1/categories.php')
+        categories = response_mealdb.json()
+        cat = categories["categories"]
 
-        # def randomPrice():
-        #     precio = random.randrange(3500, 12000, 100)
-        #     return precio
-        # def randomStock():
-        #     stock = random.randrange(1, 30, 1)
-        #     return stock
+        def randomPrice():
+            precio = random.randrange(3500, 12000, 100)
+            return precio
+        def randomStock():
+            stock = random.randrange(1, 30, 1)
+            return stock
 
-        # for item in cat:
-        #     strCategory = item['strCategory']
-        #     reponse_strCategory = requests.get(f'https://www.themealdb.com/api/json/v1/1/filter.php?c={strCategory}')
-        #     meals = reponse_strCategory.json()
-        #     meals_index = meals['meals']
-        #     for meal in meals_index:
-        #         print(meal['idMeal'])
-        #         print(meal['strMeal'])
-        #         print(randomPrice())
-        #         print(randomStock())
+        for item in cat:
+            strCategory = item['strCategory']
+            reponse_strCategory = requests.get(f'https://www.themealdb.com/api/json/v1/1/filter.php?c={strCategory}')
+            meals = reponse_strCategory.json()
+            meals_index = meals['meals']
+            for meal in meals_index:
+                print(meal['idMeal'])
+                print(meal['strMeal'])
+                print(randomPrice())
+                print(randomStock())
                 
-        #         pro = producto()
-        #         pro.id = meal['idMeal']
-        #         pro.nom_producto = meal['strMeal']
-        #         pro.precio = int(randomPrice())
-        #         pro.stock = int(randomStock())
-        #         pro.save()
-        #         print("------------")
-        #         print("Agregado!")
+                pro = producto()
+                pro.id = meal['idMeal']
+                pro.nom_producto = meal['strMeal']
+                pro.precio = int(randomPrice())
+                pro.stock = int(randomStock())
+                pro.save()
+                print("------------")
+                print("Agregado!")
                 
     
     return render(request, 'crud/index.html', data)

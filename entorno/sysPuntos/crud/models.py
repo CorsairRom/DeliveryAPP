@@ -53,7 +53,7 @@ class metodo_pago(models.Model):
     
 class producto(models.Model):
     id = models.CharField(unique=True, max_length = 10, primary_key=True, verbose_name='id')
-    nom_producto = models.CharField(max_length=50, null=True, verbose_name='Nombre producto') 
+    nom_producto = models.CharField(max_length=200, null=True, verbose_name='Nombre producto') 
     precio = models.IntegerField()
     stock = models.IntegerField()
     
