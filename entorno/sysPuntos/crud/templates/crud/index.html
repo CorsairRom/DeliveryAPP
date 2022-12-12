@@ -50,12 +50,12 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-      <div class="container">
+      {% comment %} <div class="container" style="display:none;">
         <form method="POST">
           {% csrf_token %}
         <button type="submit" class="btn btn-warning" name="copy-data" id="btn-del"><i class="fa-solid fa-trash"></i></button>
         </form>
-      </div>
+      </div> {% endcomment %}
 
 
 
