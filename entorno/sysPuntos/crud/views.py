@@ -123,7 +123,6 @@ def perfil(request):
         dir_mod.nombre_dir = texto
         dir_mod.save()
         print(dir_mod)
-        # redirect(perfil)
         
     if 'eliminar' in request.POST:
         direccion_idd = request.POST.get("recipient-id")
@@ -167,7 +166,6 @@ def categoria(request):
     
     data = {
         'categorias' : category['categories'],
-        
     }
     # print(category['categories'])
     # for item in category['categories']:
