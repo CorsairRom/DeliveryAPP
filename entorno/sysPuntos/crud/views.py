@@ -107,7 +107,7 @@ def register(request):
             login(request, prueba)
             # print("esto es un print")
             return redirect(to="CreateCliente")
-        data["form"]= formulario    
+        data["form"]= formulario
     return render(request, 'registration/register.html', data)
 
 def perfil(request):
@@ -129,7 +129,7 @@ def perfil(request):
         dir_del= direccion.objects.get(id = direccion_idd)
         dir_del.delete()
         
-        
+    
         
         
     data = {
